@@ -26,6 +26,7 @@ This documentation provides comprehensive API reference for DepthAnything3, incl
 Here are quick examples to get you started:
 
 ### 🚀 Basic Depth Estimation
+
 ```python
 from depth_anything_3.api import DepthAnything3
 
@@ -35,6 +36,7 @@ prediction = model.inference(["image1.jpg", "image2.jpg"])
 ```
 
 ### 📷 Pose-Conditioned Depth Estimation
+
 ```python
 import numpy as np
 
@@ -47,6 +49,7 @@ prediction = model.inference(
 ```
 
 ### 📤 Export Results
+
 ```python
 # Export depth data and 3D visualization
 prediction = model.inference(
@@ -57,6 +60,7 @@ prediction = model.inference(
 ```
 
 ### 🔍 Feature Extraction
+
 ```python
 # Export intermediate features from specific layers
 prediction = model.inference(
@@ -68,6 +72,7 @@ prediction = model.inference(
 ```
 
 ### ✨ Advanced Export with Gaussian Splatting
+
 ```python
 # Export multiple formats including Gaussian Splatting
 # Note: infer_gs=True requires da3-giant or da3nested-giant-large model
@@ -85,6 +90,7 @@ prediction = model.inference(
 ```
 
 ### 🎨 Advanced Export with Feature Visualization
+
 ```python
 # Export with intermediate feature visualization
 prediction = model.inference(
@@ -97,6 +103,7 @@ prediction = model.inference(
 ```
 
 ### 📐 Using Ray-Based Pose Estimation
+
 ```python
 # Use ray-based pose estimation instead of camera decoder
 prediction = model.inference(
@@ -108,6 +115,7 @@ prediction = model.inference(
 ```
 
 ### 🎯 Reference View Selection
+
 ```python
 # For multi-view inputs, automatically select the best reference view
 prediction = model.inference(
@@ -139,6 +147,7 @@ model = model.to("cuda")  # Move to GPU
 ```
 
 **Parameters:**
+
 - `model_name` (str, default: "da3-large"): The name of the model preset to use.
   - **Available models:**
     - 🦾 `"da3-giant"` - 1.15B params, any-view model with GS support
@@ -183,6 +192,7 @@ prediction = model.inference(
 ### 📸 Input Parameters
 
 #### `image` (required)
+
 - **Type**: `List[Union[np.ndarray, Image.Image, str]]`
 - **Description**: List of input images. Can be numpy arrays, PIL Images, or file paths.
 - **Example**:
@@ -198,12 +208,14 @@ prediction = model.inference(
   ```
 
 #### `extrinsics` (optional)
+
 - **Type**: `Optional[np.ndarray]`
 - **Shape**: `(N, 4, 4)` where N is the number of input images
 - **Description**: Camera extrinsic matrices (world-to-camera transformation). When provided, enables pose-conditioned depth estimation mode.
 - **Note**: If not provided, the model operates in standard depth estimation mode.
 
 #### `intrinsics` (optional)
+
 - **Type**: `Optional[np.ndarray]`
 - **Shape**: `(N, 3, 3)` where N is the number of input images
 - **Description**: Camera intrinsic matrices containing focal length and principal point information. When provided, enables pose-conditioned depth estimation mode.
@@ -211,20 +223,24 @@ prediction = model.inference(
 ### 🎯 Pose Alignment Parameters
 
 #### `align_to_input_ext_scale` (default: True)
+
 - **Type**: `bool`
 - **Description**: When True the predicted extrinsics are replaced with the input
   ones and the depth maps are rescaled to match their metric scale. When False the
   function returns the internally aligned poses computed via Umeyama alignment.
 
 #### `infer_gs` (default: False)
+
 - **Type**: `bool`
 - **Description**: Enable Gaussian Splatting branch for gaussian splatting exports. Required when using `gs_ply` or `gs_video` export formats.
 
 #### `use_ray_pose` (default: False)
+
 - **Type**: `bool`
 - **Description**: Use ray-based pose estimation instead of camera decoder for pose prediction. When True, the model uses ray prediction heads to estimate camera poses; when False, it uses the camera decoder approach.
 
 #### `ref_view_strategy` (default: "saddle_balanced")
+
 - **Type**: `str`
 - **Description**: Strategy for selecting the reference view from multiple input views. Options: `"first"`, `"middle"`, `"saddle_balanced"`, `"saddle_sim_range"`. Only applied when number of views ≥ 3. See [detailed documentation](funcs/ref_view_strategy.md) for strategy comparisons.
 - **Available strategies**:
@@ -236,6 +252,7 @@ prediction = model.inference(
 ### 🔍 Feature Export Parameters
 
 #### `export_feat_layers` (default: [])
+
 - **Type**: `List[int]`
 - **Description**: List of layer indices to export intermediate features from. Features are stored in the `aux` dictionary of the Prediction object with keys like `feat_layer_0`, `feat_layer_1`, etc.
 
@@ -246,18 +263,21 @@ These arguments are only used when exporting Gaussian-splatting videos (include
 with ``M`` views.
 
 #### `render_exts` (optional)
+
 - **Type**: `Optional[np.ndarray]`
 - **Shape**: `(M, 4, 4)`
 - **Description**: Camera extrinsics for the synthesized trajectory. If omitted,
   the exporter falls back to the predicted poses.
 
 #### `render_ixts` (optional)
+
 - **Type**: `Optional[np.ndarray]`
 - **Shape**: `(M, 3, 3)`
 - **Description**: Camera intrinsics for each rendered frame. Leave `None` to
   reuse the input intrinsics.
 
 #### `render_hw` (optional)
+
 - **Type**: `Optional[Tuple[int, int]]`
 - **Description**: Explicit output resolution `(height, width)` for the rendered
   frames. Defaults to the input resolution when not provided.
@@ -265,10 +285,12 @@ with ``M`` views.
 ### ⚡ Processing Parameters
 
 #### `process_res` (default: 504)
+
 - **Type**: `int`
 - **Description**: Base resolution for processing. The model will resize images to this resolution for inference.
 
 #### `process_res_method` (default: "upper_bound_resize")
+
 - **Type**: `str`
 - **Description**: Method for resizing images to the target resolution.
 - **Options**:
@@ -281,10 +303,12 @@ with ``M`` views.
 ### 📦 Export Parameters
 
 #### `export_dir` (optional)
+
 - **Type**: `Optional[str]`
 - **Description**: Directory path where exported files will be saved. If not provided, no files will be exported.
 
 #### `export_format` (default: "mini_npz")
+
 - **Type**: `str`
 - **Description**: Format for exporting results. Supports multiple formats separated by `-`.
 - **Example**: `"mini_npz-glb"` exports both mini_npz and glb formats.
@@ -294,14 +318,17 @@ with ``M`` views.
 These parameters are passed directly to the `inference()` method and only apply when `export_format` includes `"glb"`.
 
 ##### `conf_thresh_percentile` (default: 40.0)
+
 - **Type**: `float`
 - **Description**: Lower percentile for adaptive confidence threshold. Points below this confidence percentile will be filtered out from the point cloud.
 
 ##### `num_max_points` (default: 1,000,000)
+
 - **Type**: `int`
 - **Description**: Maximum number of points in the exported point cloud. If the point cloud exceeds this limit, it will be downsampled.
 
 ##### `show_cameras` (default: True)
+
 - **Type**: `bool`
 - **Description**: Whether to include camera wireframes in the exported GLB file for visualization.
 
@@ -310,6 +337,7 @@ These parameters are passed directly to the `inference()` method and only apply 
 These parameters are passed directly to the `inference()` method and only apply when `export_format` includes `"feat_vis"`.
 
 ##### `feat_vis_fps` (default: 15)
+
 - **Type**: `int`
 - **Description**: Frame rate for the output video when visualizing features across multiple images.
 
@@ -318,6 +346,7 @@ These parameters are passed directly to the `inference()` method and only apply 
 These parameters are passed directly to the `inference()` method and only apply when `export_format` includes `"gs_ply"` or `"gs_video"`.
 
 ##### `export_kwargs` (default: `{}`)
+
 - Type: `dict[str, dict[str, Any]]`
 - Description: Per-format extra arguments passed to export functions, mainly for `"gs_ply"` and `"gs_video"`.
   - Access pattern: `export_kwargs[export_format][key] = value`
@@ -340,16 +369,19 @@ These parameters are passed directly to the `inference()` method and only apply 
 The API supports multiple export formats for different use cases:
 
 ### 📊 `mini_npz`
+
 - **Description**: Minimal NPZ format containing essential data
 - **Contents**: `depth`, `conf`, `exts`, `ixts`
 - **Use case**: Lightweight storage for depth data with camera parameters
 
 ### 📦 `npz`
+
 - **Description**: Full NPZ format with comprehensive data
 - **Contents**: `depth`, `conf`, `exts`, `ixts`, `image`, etc.
 - **Use case**: Complete data export for advanced processing
 
 ### 🌐 `glb`
+
 - **Description**: 3D visualization format with point cloud and camera poses
 - **Contents**:
   - Point cloud with colors from original images
@@ -367,6 +399,7 @@ The API supports multiple export formats for different use cases:
   - `show_cameras` (bool, default: True): Whether to include camera wireframes in the exported GLB file for visualization.
 
 ### ✨ `gs_ply`
+
 - **Description**: Gaussian Splatting point cloud format
 - **Contents**: 3DGS data in PLY format. Compatible with standard 3DGS viewers such as [SuperSplat](https://superspl.at/editor) (recommended), [SPARK](https://sparkjs.dev/viewer/).
 - **Use case**: Gaussian Splatting reconstruction
@@ -375,6 +408,7 @@ The API supports multiple export formats for different use cases:
   - `gs_views_interval`: Export to 3DGS every N views, default: `1`.
 
 ### 🎥 `gs_video`
+
 - **Description**: Rasterized 3DGS to obtain videos
 - **Contents**: A video of 3DGS-rasterized views using either provided viewpoints or a predefined camera trajectory.
 - **Use case**: Video rendering for Gaussian Splatting
@@ -396,6 +430,7 @@ The API supports multiple export formats for different use cases:
     - `low`: Low quality video (fewer storage space)
 
 ### 🔍 `feat_vis`
+
 - **Description**: Feature visualization format
 - **Contents**: PCA-visualized intermediate features from specified layers
 - **Use case**: Model interpretability and feature analysis
@@ -404,11 +439,13 @@ The API supports multiple export formats for different use cases:
   - `feat_vis_fps` (int, default: 15): Frame rate for the output video when visualizing features across multiple images.
 
 ### 🎨 `depth_vis`
+
 - **Description**: Depth visualization format
 - **Contents**: Color-coded depth maps alongside original images
 - **Use case**: Visual inspection of depth estimation quality
 
 ### 🔗 Multiple Format Export
+
 You can export multiple formats simultaneously by separating them with `-`:
 
 ```python
