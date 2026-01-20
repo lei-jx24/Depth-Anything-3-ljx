@@ -6,9 +6,9 @@ from depth_anything_3.api import DepthAnything3
 import tempfile  # 用于创建临时目录
 
 # -------------------------- 1. 配置参数 --------------------------
-VIDEO_PATH = "./assets/videos/boy.mp4"
+VIDEO_PATH = "/home/user/ljx/FileStore/raw_video/soccer.mp4"
 OUTPUT_DIR = "./assets/videos/video_output"
-TEMP_FRAME_DIR = "./assets/videos/temp_frames"  # 临时帧保存目录
+TEMP_FRAME_DIR = "/home/user/ljx/FileStore/preprocessed_video/soccer/"  # 临时帧保存目录
 FPS = 5
 MODEL_NAME = "depth-anything/DA3NESTED-GIANT-LARGE"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
