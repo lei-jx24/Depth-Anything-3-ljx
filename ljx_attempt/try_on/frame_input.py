@@ -6,8 +6,8 @@ import glob
 from depth_anything_3.api import DepthAnything3
 
 # -------------------------- 1. 配置参数 --------------------------
-OUTPUT_DIR = "/home/user/ljx/FileStore/DA3_MegaSaM_DYNAPO/DA3_output/bamboo_2"
-image_dir = "/home/user/ljx/FileStore/Sintel/bamboo_2/rgb"  # input帧目录
+OUTPUT_DIR = "/home/user/ljx/FileStore/DA3_MegaSaM_DYNAPO/DA3_output/temple_2"
+image_dir = "/home/user/ljx/FileStore/Sintel/temple_2/rgb"  # input帧目录
 MODEL_NAME = "depth-anything/DA3NESTED-GIANT-LARGE"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
